@@ -18,7 +18,7 @@ jobs:
     - name: Restore tools
       run: dotnet tool restore
     - name: Run dotnet format
-      run: find . -type f -name "*.csproj" -or -name "*.vbproj" | xargs --no-run-if-empty dotnet format
+      run: find . -type f -name "*.csproj" -or -name "*.vbproj" | xargs --max-args=1 --no-run-if-empty dotnet format
     - name: Run fantomas
       run: find . -type f -name "*.fs" -or -name "*.fsx" | xargs --no-run-if-empty dotnet fantomas
     - name: Commit changes
