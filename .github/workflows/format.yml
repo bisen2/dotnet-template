@@ -1,4 +1,5 @@
 name: Automated Code Formatting
+
 on:
   push:
   pull_request:
@@ -17,10 +18,10 @@ jobs:
     - name: Restore tools
       run: dotnet tool restore
     - name: Run dotnet format
-      run: |
-        find . -type f -name "*.csproj" | xargs dotnet format
-        find . -type f -name "*.vbproj" | xargs dotnet format
+      run: find . -type f -name "*.csproj" -or -name "*.vbproj" | xargs --no-run-if-empty dotnet format
     - name: Run fantomas
-      run: |
-        dotnet fantomas $(find . -type f -name "*.fs")
-        dotnet fantomas $(find . -type f -name "*.fsx")
+      run: find . -type f -name "*.fs" -or -name "*.fsx" | xargs --no-run-if-empty dotnet fantomas
+    - name: Commit changes
+      uses: stefanzweifel/git-auto-commit-action@v4.11.0
+      with:
+        commit_message: Automated formatting
