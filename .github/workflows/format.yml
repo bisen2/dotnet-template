@@ -1,0 +1,26 @@
+name: Automated Code Formatting
+on:
+  push:
+  pull_request:
+
+jobs:
+
+  Format:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2.3.4
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1.8.0
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore tools
+      run: dotnet tool restore
+    - name: Run dotnet format
+      run: |
+        find . -type f -name "*.csproj" | xargs dotnet format
+        find . -type f -name "*.vbproj" | xargs dotnet format
+    - name: Run fantomas
+      run: |
+        dotnet fantomas $(find . -type f -name "*.fs")
+        dotnet fantomas $(find . -type f -name "*.fsx")
